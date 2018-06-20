@@ -1,0 +1,61 @@
+<?php
+use Zend\Form\View\Helper\FormSelect;
+// use Zend\Form\Element\Select;
+use Zend\Form\Element\Select;
+?>
+<h1><?php echo $this->titulo?></h1>
+
+<?php
+// $this->headTitle("Login usuarios");
+// $form = $this->form;
+// $form->prepare();
+// echo $this->form()->openTag($form);
+?>
+
+
+<?php 
+$form = $this->form;
+$form->prepare();
+$form->setAttributes(array(
+'action' => $this->url . '/login/user',
+'method' => 'post'
+));
+$formLabel = $this->plugin('formLabel');
+
+echo $this->form()->openTag($form);
+?>
+
+<div class="form_element">
+<?php
+    $correol = $form->get('correo');
+    echo "Correo: ".$this->formInput($correol);
+//     if(isset($error["correo"])){
+//       echo $error["correo"]['emailAddressInvalidHostname'];
+//     }
+?>
+</div>
+
+<div>
+ <?php
+//         $correo = $form->get('correo');
+//         echo $formLabel->openTag() . $correo->getLabel();
+//         echo $formLabel->closeTag();
+// //         echo $this->formSelect($correo);
+//         echo $this->formSelect($correo);
+//         echo $this->formElementErrors($correo);
+    ?>
+</div>
+<div class="form_element">
+<?php
+    $pass = $form->get('password');
+    echo "Contraseña: ".$this->formInput($pass);
+    echo $this->formElementErrors($pass);
+?>
+</div>
+ 
+<?php 
+echo $this->flashMessenger()->render();
+ 
+echo $this->formElement($form->get('submit'));
+echo $this->form()->closeTag(); 
+?>

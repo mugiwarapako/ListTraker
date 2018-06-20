@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Modelos</h1>
+    
+    <p>
+	   <a class="btn btn-success"
+		href="<?=$this->basePath("login/user/cerrar")?>">Cerrar sesión</a>
+   </p>
+    
+    <?php 
+    $flash=$this->flashMessenger()
+                ->setMessageOpenFormat('<div%s>')
+                ->setMessageSeparatorString('')
+                ->setMessageCloseString('</div>');
+    
+                
+                //echo "<pre>"; print_r($this->modelos); exit;
+                
+    ?>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Donde se tomo</th>
+        </tr>
+        <?php foreach($this->modelos as $modelo){ ?>
+        <tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+        
+        <?php
+            //echo "<pre>"; print_r($modelo); 
+        ?>
+        
+            <td><?php echo $modelo["id"]?></td>
+            <td><?php echo $modelo["descripcion"]?></td>       
+            <td> <img src="<?php echo $modelo["imagen"]?>" height="100px" width="50px" alt="Italian Trulli"></td> 
+            <td><?php echo $modelo["nombre"]?></td>
+            <td><?php echo $modelo["fecha"] ;?></td>
+            <td><?php echo $modelo["hora"] ;?></td>
+            <td>
+            	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="<?php echo $modelo["hora"]; ?>" >Mostrar mapa</button>
+            </td>
+        </tr>
+        <?php } ?>
+    </table>
+
+
+	<!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Mapa de donde se tomo la foto</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          
+          
+          
+          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript">
+      $('#exampleModal').on('show.bs.modal', function (event) {
+    	  var button = $(event.relatedTarget) // Button that triggered the modal
+    	  var recipient = button.data('whatever') // Extract info from data-* attributes
+    	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    	  //console.dir(event);
+    	  var modal = $(this)
+    	})
+      </script>
+</html>
