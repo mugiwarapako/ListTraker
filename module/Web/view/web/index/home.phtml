@@ -1,79 +1,118 @@
 <!DOCTYPE html>
 <html>
+
 <body>
-    <h1>Modelos</h1>
+<style>
+body, .modal-open .page-container, .modal-open .page-container .navbar-fixed-top, .modal-open .modal-container {
+    overflow-y: scroll;
+}
+@media (max-width: 979px) {
+    .modal-open .page-container .navbar-fixed-top {
+        overflow-y: visible;
+    }
+}
+#map-canvas {
+    height: 400px;
+}
+</style>
+	<h1>Modelos</h1>
+
+	<p>
+		<a class="btn btn-success"
+			href="<?=$this->basePath("login/user/cerrar")?>">Cerrar sesión</a>
+	</p>
     
-    <p>
-	   <a class="btn btn-success"
-		href="<?=$this->basePath("login/user/cerrar")?>">Cerrar sesión</a>
-   </p>
+    <?php
+    $flash = $this->flashMessenger()
+        ->setMessageOpenFormat('<div%s>')
+        ->setMessageSeparatorString('')
+        ->setMessageCloseString('</div>');
     
-    <?php 
-    $flash=$this->flashMessenger()
-                ->setMessageOpenFormat('<div%s>')
-                ->setMessageSeparatorString('')
-                ->setMessageCloseString('</div>');
+    // echo "<pre>"; print_r($this->modelos); exit;
     
-                
-                //echo "<pre>"; print_r($this->modelos); exit;
-                
     ?>
     <table class="table">
-        <tr>
-            <th>ID</th>
-            <th>Descripción</th>
-            <th>Imagen</th>
-            <th>Nombre</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Donde se tomo</th>
-        </tr>
+		<tr>
+			<th>ID</th>
+			<th>Descripción</th>
+			<th>Imagen</th>
+			<th>Nombre</th>
+			<th>Fecha</th>
+			<th>Hora</th>
+			<th>Donde se tomo</th>
+		</tr>
+        
+        
         <?php foreach($this->modelos as $modelo){ ?>
         <tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
         
         <?php
-            //echo "<pre>"; print_r($modelo); 
-        ?>
+            // echo "<pre>"; print_r($modelo);
+            ?>
         
             <td><?php echo $modelo["id"]?></td>
-            <td><?php echo $modelo["descripcion"]?></td>       
-            <td> <img src="<?php echo $modelo["imagen"]?>" height="100px" width="50px" alt="Italian Trulli"></td> 
-            <td><?php echo $modelo["nombre"]?></td>
-            <td><?php echo $modelo["fecha"] ;?></td>
-            <td><?php echo $modelo["hora"] ;?></td>
-            <td>
-            	<button type="button" class="btn btn-primary" onclick="imprimir(this)" data-toggle="modal" data-target="#exampleModal" >Mostrar mapa</button>
-            </td>
-            <td style="display:none;"><?php echo $modelo["latitud"] ;?></td>
-            <td style="display:none;"><?php echo $modelo["longitud"] ;?></td>
-        </tr>
+			<td><?php echo $modelo["descripcion"]?></td>
+			<td><img src="<?php echo $modelo["imagen"]?>" height="100px"
+				width="50px" alt="Italian Trulli"></td>
+			<td><?php echo $modelo["nombre"]?></td>
+			<td><?php echo $modelo["fecha"] ;?></td>
+			<td><?php echo $modelo["hora"] ;?></td>
+			<td>
+				<!--  	<button type="button" class="btn btn-primary" onclick="imprimir(this)" data-toggle="modal" data-target="#exampleModal" >Mostrar mapa</button>
+            -->
+				<button type="button" class="btn btn-primary"
+					onclick="initMap(this)" data-toggle="modal"
+					data-target="#exampleModal">Mostrar mapa</button>
+			</td>
+
+			<td style="display: none;"><?php  echo $modelo["latitud"] ;?></td>
+			<td style="display: none;"><?php echo $modelo["longitud"] ;?></td>
+
+
+		</tr>
         <?php } ?>
     </table>
 
+	<div class="page-container">
+		<div class="container">
+			<br />
+			<button class="btn launch-map">Launch Map</button>
+		</div>
+	</div>
+	<div id="modal" class="modal hide fade">
+		<div class="modal-body">
+			<div id="map-canvas"></div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" data-dismiss="modal" class="btn btn-primary"
+				data-value="1">Continue</button>
+			<button type="button" data-dismiss="modal" class="btn" data-value="0">Cancel</button>
+		</div>
+	</div>
 
 	<!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Mapa de donde se tomo la foto</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-          
-          
-          
-          
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-      
-      <script type="text/javascript">
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Mapa de donde se
+						tomo la foto</h5>
+					<div id="map"></div>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
 
       var id;
       var latitud;
@@ -85,7 +124,7 @@
     	  //con esta linea de codigo se agrega el html
     	  modal.find('.modal-body').append("<img src='https://www.chiquipedia.com/imagenes/imagenes-animo09.jpg' height='100%' width='50%' alt='Italian Trulli'>");
     	  //con esta linea de codigo se agrega texto
-    	  modal.find('.modal-body').text("latitud  ===> " + latitud + "   longitud ===> " + longitud);
+    	//  modal.find('.modal-body').text("latitud  ===> " + latitud + "   longitud ===> " + longitud);
     	})
     	
     	function imprimir(boton){
@@ -97,4 +136,73 @@
         	
      	}
       </script>
+
+
+		<style>
+#map {
+	height: 100%;
+}
+</style>
+
+		<script
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCKiIqCdZGrVxx06LSbe7uG3zXOq1Cz5k&callback=initMap"
+			async defer></script>
+		<script>
+		
+      var map;
+  	 function initMap(boton) {
+  	  	 
+  		var celdas = $(boton).closest('tr').find('td');
+    	id = celdas.eq(0).text();
+    	latitud = celdas.eq(7).text();
+    	longitud = celdas.eq(8).text();
+    	
+  	  	
+        map = new google.maps.Map(document.getElementById('map'), {
+        	 console.log("entra");
+		  center: {lat: 43.5293, lng: -5.6773},
+          zoom: 13,
+        });
+        var marker = new google.maps.Marker({
+          position: {lat: 43.542194, lng: -5.676875},
+          map: map,
+	  title: 'Acuario de Gijón'
+        });
+      }
+ 
+      
+	</script>
+
+<script>
+var center = new google.maps.LatLng(59.76522, 18.35002);
+
+function initialize() {
+
+    var mapOptions = {
+        zoom: 7,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: center
+    };
+
+    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    var marker = new google.maps.Marker({
+        map: map,
+        position: center
+    });
+}
+
+$('.launch-map').on('click', function () {
+    
+    $('#modal').modal({
+        backdrop: 'static',
+        keyboard: false
+    }).on('shown.bs.modal', function () {
+        google.maps.event.trigger(map, 'resize');
+        map.setCenter(center);
+    });
+});
+
+initialize();
+</script>
 </html>

@@ -56,5 +56,14 @@ class IndexController extends AbstractActionController
             ));
         }
     }
+    
+    function mapaAction()
+    {
+        return new ViewModel(array(
+            "titulo" => "Login"
+            
+            
+        ));
+    }
 }
 ?>
