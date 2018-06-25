@@ -60,8 +60,8 @@ body, .modal-open .page-container, .modal-open .page-container .navbar-fixed-top
 			<td>
 				<!--  	<button type="button" class="btn btn-primary" onclick="imprimir(this)" data-toggle="modal" data-target="#exampleModal" >Mostrar mapa</button>
             -->
-				<button type="button" class="btn btn-primary"
-					onclick="initMap(this)" data-toggle="modal"
+					<button type="button" class="btn btn-primary" onclick="imprimir(this)"
+					data-toggle="modal"
 					data-target="#exampleModal">Mostrar mapa</button>
 			</td>
 
@@ -73,134 +73,65 @@ body, .modal-open .page-container, .modal-open .page-container .navbar-fixed-top
         <?php } ?>
     </table>
 
-	<div class="page-container">
-		<div class="container">
-			<br />
-			<button class="btn launch-map">Launch Map</button>
-		</div>
-	</div>
-	<div id="modal" class="modal hide fade">
-		<div class="modal-body">
-			<div id="map-canvas"></div>
-		</div>
-		<div class="modal-footer">
-			<button type="button" data-dismiss="modal" class="btn btn-primary"
-				data-value="1">Continue</button>
-			<button type="button" data-dismiss="modal" class="btn" data-value="0">Cancel</button>
-		</div>
-	</div>
-
 	<!-- Modal -->
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Mapa de donde se
-						tomo la foto</h5>
-					<div id="map"></div>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-dismiss="modal">Close</button>
-				</div>
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Mapa de donde se tomo
+					la foto</h5>
+				
+<!-- 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+<!-- 					<span aria-hidden="true">&times;</span> -->
+<!-- 				</button> -->
+			</div>
+			<div class="modal-body">
+			<div id="map-canvas"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 			</div>
 		</div>
+	</div>
 
-		<script type="text/javascript">
+</div>
 
-      var id;
-      var latitud;
-      var longitud;
-
-      
-      $('#exampleModal').on('show.bs.modal', function (event) {
-    	  var modal = $(this);
-    	  //con esta linea de codigo se agrega el html
-    	  modal.find('.modal-body').append("<img src='https://www.chiquipedia.com/imagenes/imagenes-animo09.jpg' height='100%' width='50%' alt='Italian Trulli'>");
-    	  //con esta linea de codigo se agrega texto
-    	//  modal.find('.modal-body').text("latitud  ===> " + latitud + "   longitud ===> " + longitud);
-    	})
-    	
-    	function imprimir(boton){
-      	
-        	var celdas = $(boton).closest('tr').find('td');
-        	id = celdas.eq(0).text();
-        	latitud = celdas.eq(7).text();
-        	longitud = celdas.eq(8).text();
-        	
-     	}
-      </script>
-
-
-		<style>
-#map {
-	height: 100%;
-}
-</style>
-
-		<script
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCKiIqCdZGrVxx06LSbe7uG3zXOq1Cz5k&callback=initMap"
-			async defer></script>
-		<script>
-		
-      var map;
-  	 function initMap(boton) {
-  	  	 
-  		var celdas = $(boton).closest('tr').find('td');
-    	id = celdas.eq(0).text();
-    	latitud = celdas.eq(7).text();
-    	longitud = celdas.eq(8).text();
-    	
-  	  	
-        map = new google.maps.Map(document.getElementById('map'), {
-        	 console.log("entra");
-		  center: {lat: 43.5293, lng: -5.6773},
-          zoom: 13,
-        });
-        var marker = new google.maps.Marker({
-          position: {lat: 43.542194, lng: -5.676875},
-          map: map,
-	  title: 'Acuario de Gijón'
-        });
-      }
- 
-      
-	</script>
-
+	
+<script src="https://maps.googleapis.com/maps/api/js"></script>
 <script>
-var center = new google.maps.LatLng(59.76522, 18.35002);
 
-function initialize() {
+function imprimir(boton){
+  	
+	var celdas = $(boton).closest('tr').find('td');
+	id = celdas.eq(0).text();
+	latitud = celdas.eq(7).text();
+	longitud = celdas.eq(8).text();
 
-    var mapOptions = {
-        zoom: 7,
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        center: center
-    };
+	var center = new google.maps.LatLng(latitud,longitud);
 
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	var mapOptions = {
+	        zoom: 16,
+	        mapTypeId: google.maps.MapTypeId.ROADMAP,
+	        center: center
+	    };
 
-    var marker = new google.maps.Marker({
-        map: map,
-        position: center
-    });
-}
+	    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-$('.launch-map').on('click', function () {
+	    var marker = new google.maps.Marker({
+	        map: map,
+	        position: center
+	    });
+	
+	}
+
+
+
+$('#exampleModal').on('show.bs.modal', function () {
     
-    $('#modal').modal({
-        backdrop: 'static',
-        keyboard: false
-    }).on('shown.bs.modal', function () {
-        google.maps.event.trigger(map, 'resize');
-        map.setCenter(center);
-    });
+	var modal = $(this);
+// 	modal.find('.modal-body').text("latitud  ===> " + latitud + "   longitud ===> " + longitud);
+// 	center= (latitud,longitud)
 });
 
 initialize();
