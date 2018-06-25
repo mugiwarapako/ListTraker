@@ -42,8 +42,10 @@
             <td><?php echo $modelo["fecha"] ;?></td>
             <td><?php echo $modelo["hora"] ;?></td>
             <td>
-            	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="<?php echo $modelo["hora"]; ?>" >Mostrar mapa</button>
+            	<button type="button" class="btn btn-primary" onclick="imprimir(this)" data-toggle="modal" data-target="#exampleModal" >Mostrar mapa</button>
             </td>
+            <td style="display:none;"><?php echo $modelo["latitud"] ;?></td>
+            <td style="display:none;"><?php echo $modelo["longitud"] ;?></td>
         </tr>
         <?php } ?>
     </table>
@@ -67,19 +69,32 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
           </div>
         </div>
       </div>
       
       <script type="text/javascript">
+
+      var id;
+      var latitud;
+      var longitud;
+
+      
       $('#exampleModal').on('show.bs.modal', function (event) {
-    	  var button = $(event.relatedTarget) // Button that triggered the modal
-    	  var recipient = button.data('whatever') // Extract info from data-* attributes
-    	  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-    	  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-    	  //console.dir(event);
-    	  var modal = $(this)
+    	  var modal = $(this);
+    	  //con esta linea de codigo se agrega el html
+    	  modal.find('.modal-body').append("<img src='https://www.chiquipedia.com/imagenes/imagenes-animo09.jpg' height='100%' width='50%' alt='Italian Trulli'>");
+    	  //con esta linea de codigo se agrega texto
+    	  modal.find('.modal-body').text("latitud  ===> " + latitud + "   longitud ===> " + longitud);
     	})
+    	
+    	function imprimir(boton){
+      	
+        	var celdas = $(boton).closest('tr').find('td');
+        	id = celdas.eq(0).text();
+        	latitud = celdas.eq(7).text();
+        	longitud = celdas.eq(8).text();
+        	
+     	}
       </script>
 </html>
